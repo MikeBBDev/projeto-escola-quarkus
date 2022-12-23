@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import com.example.dtoRequests.ProfessorRequest;
 import com.example.dtoResponses.ProfessorResponse;
@@ -24,13 +25,13 @@ public class ProfessorService {
     private final ProfessorRepository repository;
 
     public List<ProfessorResponse> retrieveAll() {
-        log.info("Listing professors");
+        log.info("Listando professores");
         final List<Professor> listOfProfessors = repository.listAll();
         return mapper.toResponse(listOfProfessors);
     }
 
     public ProfessorResponse getById(int id) {
-        log.info("Getting professor id-{}", id);
+        log.info("Coletando professor cuja id é -{}", id);
 
         Professor professor = repository.findById(id);
         return mapper.toResponse(professor);
@@ -51,9 +52,9 @@ public class ProfessorService {
     // }
 
     @Transactional
-    public ProfessorResponse save(ProfessorRequest professorRequest) {
+    public ProfessorResponse save(@Valid ProfessorRequest professorRequest) {
 
-        log.info("Saving professor - {}", professorRequest);
+        log.info("Salvando professor - {}", professorRequest);
 
         Professor entity = Professor.builder()
                 .name(professorRequest.getName())
@@ -67,7 +68,7 @@ public class ProfessorService {
     @Transactional
     public ProfessorResponse update(int id, ProfessorRequest professorRequest) {
 
-        log.info("Updating professor id - {}, data - {}", id, professorRequest);
+        log.info("Atualizando professor cuja id é - {}, data - {}", id, professorRequest);
 
         Optional<Professor> professor = repository.findByIdOptional(id);
 
@@ -82,7 +83,7 @@ public class ProfessorService {
 
     @Transactional
     public void delete(int id) {
-        log.info("Deleting professor id - {}", id);
+        log.info("Deletando professor cuja id é - {}", id);
         Optional<Professor> professor = repository.findByIdOptional(id);
         professor.ifPresent(repository::delete);
     }

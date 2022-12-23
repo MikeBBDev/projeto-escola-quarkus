@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Builder
 @Data
@@ -20,6 +21,7 @@ public class Professor {
     @Column(name = "professor_id")
     private Integer id;
 
+    @NotBlank(message = "Nome não deve ser vazio")
     @Column(name = "professor_name", nullable = false)
     private String name;
 

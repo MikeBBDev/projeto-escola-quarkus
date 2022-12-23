@@ -1,6 +1,7 @@
 package com.example.resources;
 
 import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -13,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.example.dtoRequests.ProfessorRequest;
+import com.example.dtoResponses.ErrorResponse;
 import com.example.services.ProfessorService;
 
 @Path("/professores")
@@ -41,11 +43,20 @@ public class ProfessorResource {
 
     @POST
     public Response saveProfessor(final ProfessorRequest professor) {
-        final var response = service.save(professor);
-        return Response
-                .status(Response.Status.CREATED)
-                .entity(response)
-                .build();
+        try {
+            final var response = service.save(professor);
+
+            return Response
+                    .status(Response.Status.CREATED)
+                    .entity(response)
+                    .build();
+
+        } catch (ConstraintViolationException e) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(ErrorResponse.createFromValidation(e))
+                    .build();
+        }
     }
 
     @PUT

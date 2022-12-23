@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import com.example.dtoRequests.DisciplinaRequest;
 import com.example.dtoResponses.DisciplinaResponse;
@@ -24,22 +25,22 @@ public class DisciplinaService {
     private final DisciplinaRepository repository;
 
     public List<DisciplinaResponse> retrieveAll() {
-        log.info("Listing alunos");
+        log.info("Listando disciplinas");
         final List<Disciplina> listOfDisciplina = repository.listAll();
         return mapper.toResponse(listOfDisciplina);
     }
 
     public DisciplinaResponse getById(int id) {
-        log.info("Getting aluno id-{}", id);
+        log.info("Coletando disciplina cuja id é -{}", id);
 
         Disciplina disciplina = repository.findById(id);
         return mapper.toResponse(disciplina);
     }
 
     @Transactional
-    public DisciplinaResponse save(DisciplinaRequest disciplinaRequest) {
+    public DisciplinaResponse save(@Valid DisciplinaRequest disciplinaRequest) {
 
-        log.info("Saving disciplina - {}", disciplinaRequest);
+        log.info("Salvando disciplina - {}", disciplinaRequest);
 
         Disciplina entity = Disciplina.builder()
                 .name(disciplinaRequest.getName())
@@ -53,7 +54,7 @@ public class DisciplinaService {
     @Transactional
     public DisciplinaResponse update(int id, DisciplinaRequest disciplinaRequest) {
 
-        log.info("Updating disciplina id - {}, data - {}", id, disciplinaRequest);
+        log.info("Atualizando disciplina cuja id é - {}, data - {}", id, disciplinaRequest);
 
         Optional<Disciplina> disciplina = repository.findByIdOptional(id);
 
@@ -68,7 +69,7 @@ public class DisciplinaService {
 
     @Transactional
     public void delete(int id) {
-        log.info("Deleting disciplina id - {}", id);
+        log.info("Deletando disciplina cuja id é - {}", id);
         Optional<Disciplina> disciplina = repository.findByIdOptional(id);
         disciplina.ifPresent(repository::delete);
     }

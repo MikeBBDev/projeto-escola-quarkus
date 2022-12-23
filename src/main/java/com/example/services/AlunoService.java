@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import com.example.dtoRequests.AlunoRequest;
 import com.example.dtoResponses.AlunoResponse;
@@ -24,22 +25,22 @@ public class AlunoService {
     private final AlunoRepository repository;
 
     public List<AlunoResponse> retrieveAll() {
-        log.info("Listing alunos");
+        log.info("Listando alunos");
         final List<Aluno> listOfAlunos = repository.listAll();
         return mapper.toResponse(listOfAlunos);
     }
 
     public AlunoResponse getById(int id) {
-        log.info("Getting aluno id-{}", id);
+        log.info("Coletando alunos por id-{}", id);
 
         Aluno aluno = repository.findById(id);
         return mapper.toResponse(aluno);
     }
 
     @Transactional
-    public AlunoResponse save(AlunoRequest alunoRequest) {
+    public AlunoResponse save(@Valid AlunoRequest alunoRequest) {
 
-        log.info("Saving aluno - {}", alunoRequest);
+        log.info("Salvando aluno - {}", alunoRequest);
 
         Aluno entity = Aluno.builder()
                 .name(alunoRequest.getName())
@@ -53,7 +54,7 @@ public class AlunoService {
     @Transactional
     public AlunoResponse update(int id, AlunoRequest alunoRequest) {
 
-        log.info("Updating aluno id - {}, data - {}", id, alunoRequest);
+        log.info("Atualizando aluno cuja id é - {}, data - {}", id, alunoRequest);
 
         Optional<Aluno> aluno = repository.findByIdOptional(id);
 
@@ -68,7 +69,7 @@ public class AlunoService {
 
     @Transactional
     public void delete(int id) {
-        log.info("Deleting aluno id - {}", id);
+        log.info("Deletando aluno cuja id é - {}", id);
         Optional<Aluno> aluno = repository.findByIdOptional(id);
         aluno.ifPresent(repository::delete);
     }
