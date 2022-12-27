@@ -1,5 +1,6 @@
 package com.example.mapper;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,15 +25,13 @@ public class ProfessorMapper {
     }
 
     public ProfessorResponse toResponse(Professor entity) {
+        Objects.requireNonNull(entity, "Entidade Professor deve ser não nula");
 
-        // if (Objects.isNull(entity))
-        //     return null;
-
-        Objects.requireNonNull(entity, "Entidade não deve ser nula");
-
+        var formatter = DateTimeFormatter.ofPattern("dd-MM-YYYY hh:mm:ss");
         return ProfessorResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())
+                .dateTime(formatter.format(entity.getDateTime()))
                 .build();
     }
 

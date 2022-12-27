@@ -5,6 +5,7 @@ import javax.validation.ConstraintViolationException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -74,6 +75,17 @@ public class AlunoResource {
         service.delete(id);
         return Response
                 .status(Response.Status.NO_CONTENT)
+                .build();
+    }
+
+    @PATCH
+    @Path("/{id}/tutor/{idProfessor}")
+    public Response updateTitular(@PathParam("id") int idAluno, @PathParam("idProfessor") int idProfessor) {
+        final var response = service.updateTutor(idAluno, idProfessor);
+
+        return Response
+                .status(Response.Status.CREATED)
+                .entity(response)
                 .build();
     }
 }

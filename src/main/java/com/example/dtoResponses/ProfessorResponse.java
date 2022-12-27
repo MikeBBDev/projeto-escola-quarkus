@@ -16,6 +16,5 @@ public class ProfessorResponse {
 
     private int id;
     private String name;
-//    private enum sexo;
-//    private String disciplina;
+    private String dateTime;
 }

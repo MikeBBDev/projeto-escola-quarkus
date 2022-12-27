@@ -1,9 +1,11 @@
 package com.example.services;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -37,23 +39,9 @@ public class ProfessorService {
         return mapper.toResponse(professor);
     }
 
-    // public ProfessorResponse getBySex(enum sexo) {
-    //     log.info("Getting professor sex-{}", sexo);
-
-    //     Professor professor = repository.findBySex(sexo);
-    //     return mapper.toResponse(professor);
-    // }
-
-    // public ProfessorResponse getByDiscipline(String discplina) {
-    //     log.info("Getting professor discipline-{}", disciplina);
-
-    //     Professor professor = repository.findByDiscipline(discplina);
-    //     return mapper.toResponse(professor);
-    // }
-
     @Transactional
     public ProfessorResponse save(@Valid ProfessorRequest professorRequest) {
-
+        Objects.requireNonNull(professorRequest, "Requisições não devem ser nulas");
         log.info("Salvando professor - {}", professorRequest);
 
         Professor entity = Professor.builder()
@@ -67,18 +55,16 @@ public class ProfessorService {
 
     @Transactional
     public ProfessorResponse update(int id, ProfessorRequest professorRequest) {
-
+        Objects.requireNonNull(professorRequest, "Requisições não devem ser nulas");
         log.info("Atualizando professor cuja id é - {}, data - {}", id, professorRequest);
 
         Optional<Professor> professor = repository.findByIdOptional(id);
 
-        if (professor.isPresent()) {
-            var entity = professor.get();
-            entity.setName(professorRequest.getName());
-            return mapper.toResponse(entity);
-        }
+        professor.orElseThrow(() -> new EntityNotFoundException("Professor not found."));
+        var entity = professor.get();
+        entity.setName(professorRequest.getName());
+        return mapper.toResponse(entity);
 
-        return new ProfessorResponse();
     }
 
     @Transactional
