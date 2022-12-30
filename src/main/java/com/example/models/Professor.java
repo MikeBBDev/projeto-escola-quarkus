@@ -30,7 +30,7 @@ public class Professor {
     @Column(name = "professor_name", nullable = false)
     private String name;
 
-    @Column(name="data_atualizacao", nullable = false)
+    @Column(name = "data_atualizacao", nullable = false)
     private LocalDateTime dateTime;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "titular")
@@ -40,7 +40,12 @@ public class Professor {
     private List<Aluno> alunos;
 
     @PrePersist
-    public void prePersist(){
+    public void prePersist() {
         setDateTime(LocalDateTime.now());
+    }
+
+    // Parece que o builder não pegou o construtor com esses argumentos
+    public Professor(Integer id2, String name2, Disciplina disciplina2, List<Aluno> tutorados,
+            LocalDateTime datetime2) {
     }
 }

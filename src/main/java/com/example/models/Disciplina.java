@@ -39,4 +39,9 @@ public class Disciplina {
         setDateTime(LocalDateTime.now());
     }
 
+    // Parece que o builder não pegou o construtor com esses argumentos
+    public Disciplina(Integer id2, String name2, Professor professor2,
+            LocalDateTime datetime2) {
+    }
+
 }
